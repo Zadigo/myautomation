@@ -10,6 +10,8 @@ const useCampaigns = defineStore('campaigns', {
     newCampaign: {
       name: null,
       url: null,
+      results_per_search: 100,
+      file: null,
       runned: false,
       paused: true,
       archived: false,
@@ -25,9 +27,22 @@ const useCampaigns = defineStore('campaigns', {
       const value = incrementLastId(this.campaigns)
       this.newCampaign.id = value
       this.campaigns.push(this.newCampaign)
+      this.resetNewCampaign()
     },
     useCampaignSetup (id) {
       this.selectedCampaignSetup = _.find(this.availableCampaigns, ['id', toNumber(id)])
+    },
+    resetNewCampaign () {
+      this.newCampaign = {
+        name: null,
+        url: null,
+        results_per_search: 100,
+        file: null,
+        runned: false,
+        paused: true,
+        archived: false,
+        draft: true
+      }
     }
   }
 })

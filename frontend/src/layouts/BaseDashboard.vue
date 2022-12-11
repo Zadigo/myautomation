@@ -1,60 +1,110 @@
 <template>
-  <!-- Aside -->
-  <dashboard-aside />
-  
-  <!-- Main -->
-  <main class="main-content border-radius-lg">
-    <!-- Nav -->
-    <dashboard-nav />
-
-    <!-- Content -->
-    <div class="container-fluid py-4">
-      <router-view></router-view>
-
-      <!-- Footer -->
-      <!-- <footer class="footer py-4">
-        <div class="container-fluid">
-          <div class="row align-items-center justify-content-lg-between">
-            <div class="col-lg-6 mb-lg-0 mb-4">
-              <div class="copyright text-center text-sm text-muted text-lg-start">
-                © 1974
-                , made with <i class="fa fa-heart"></i> by
-                <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank" rel="noopener noreferrer">Creative Tim</a>
-                for a better web.
-              </div>
+  <section class="dashboard">
+    <header>
+      <!-- Sidebar -->
+      <nav id="sidebar" link="sidebar" class="collapse d-lg-block sidebar collapse bg-white">
+        <div class="position-sticky">
+          <keep-alive>
+            <div class="list-group list-group-flush mx-3 mt-4">
+              <router-link v-for="(link, i) in adminLinks" :key="i" :to="{ name: link.to }" class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
+                <font-awesome-icon :icon="`fa-solid fa-${link.icon}`" class="me-3" />
+                <span>{{ link.title }}</span>
+              </router-link>
             </div>
-            <div class="col-lg-6">
-              <ul class="nav nav-footer justify-content-center justify-content-lg-end">
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com" class="nav-link text-muted" target="_blank" rel="noopener noreferrer">Creative Tim</a>
-                </li>
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com/presentation" class="nav-link text-muted" target="_blank" rel="noopener noreferrer">About Us</a>
-                </li>
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com/blog" class="nav-link text-muted" target="_blank" rel="noopener noreferrer">Blog</a>
-                </li>
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com/license" class="nav-link pe-0 text-muted" target="_blank" rel="noopener noreferrer">License</a>
-                </li>
-              </ul>
-            </div>
-          </div>
+          </keep-alive>
         </div>
-      </footer> -->
-    </div>
-  </main>
+      </nav>
+
+      <!-- Navbar -->
+      <nav id="main-navbar" class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+        <div class="container-fluid">
+          <button class="navbar-toggler" type="button" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+          </button>
+
+          <router-link to="/" class="navbar-brand">
+            <div class="fw-bold text-uppercase">Templates</div>
+            <!-- <img src="https://mdbootstrap.com/img/logo/mdb-transaprent-noshadows.png" height="25" loading="lazy" alt="Image 4" /> -->
+          </router-link>
+
+          <ul class="navbar-nav ms-auto d-flex flex-row">
+            <nav-item :to="{ name: 'home_view' }" link-name="Some link" />
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Main -->
+    <main>
+      <div :class="bodyClasses" class="container pt-4">
+        <router-view></router-view>
+      </div>
+    </main>
+
+    <!-- <transition name="pop">
+      <button v-if="!arrivedState.top" id="back-to-top" class="btn btn-primary btn-floating" type="button" @click="scrollToTop">
+        <font-awesome-icon icon="fa-solid fa-arrow-up" />
+      </button>
+    </transition> -->
+  </section>
 </template>
 
 <script>
-import DashboardAside from '@/components/DashboardAside.vue'
-import DashboardNav from '@/components/DashboardNav.vue'
+// import _ from 'lodash'
+
+// import { provide, ref } from 'vue'
+// import { useDarkMode } from '../composables/darkmode'
+import { scrollToTop } from '@/composables/utils'
+// import { useScroll } from '@vueuse/core'
+
+import NavItem from './bootstrap/nav/NavItem.vue'
 
 export default {
-  name: 'BaseDashboard',
+  name: 'DashboardLayout',
   components: {
-    DashboardAside,
-    DashboardNav
+    NavItem
+  },
+  props: {
+    bodyClasses: {
+      type: String,
+      required: false
+    }
+  },
+  setup () {
+    // const target = ref(null)
+    // const { y, arrivedState } = useScroll(target)
+    // const { darkMode } = useDarkMode()
+    // provide('darkMode', darkMode)
+    return {
+      // darkMode,
+      // target,
+      scrollToTop,
+      // scrollY: y,
+      // arrivedState
+    }
+  },
+  computed: {
+    adminLinks () {
+      return [
+        {
+          title: 'Home',
+          to: 'home_view',
+          icon: 'home'
+        },
+        {
+          title: 'Campaigns',
+          to: 'campaigns_view',
+          icon: 'table'
+        }
+      ]
+    }
+  },
+  mounted () {
+    this.target = window.document
   }
 }
 </script>
+
+<style scoped>
+@import url('@/layouts/bootstrap/css/dashboard1.css');
+</style>

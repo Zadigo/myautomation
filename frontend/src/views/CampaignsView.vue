@@ -2,7 +2,8 @@
   <section>
     <div class="row">
       <dashboard-page-header title="Campaigns">
-        <button type="button" class="btn btn-primary" @click="showListCampaigns = !showListCampaigns">
+        <button type="button" class="btn btn-info" @click="showListCampaigns = !showListCampaigns">
+          <font-awesome-icon icon="fa-solid fa-hourglass-start" class="me-2" />
           Start a campaign
         </button>
       </dashboard-page-header>
@@ -12,9 +13,11 @@
       </div>
 
       <!-- Content -->
-      <div v-if="campaigns.length === 0" class="col-7 offset-md-2 text-center">
+      <div v-if="campaigns.length === 0" class="col-sm-12 col-md-7 offset-md-2 text-center my-3">
+        <img :src="require('@/assets/computer.png')" width="200" height="200" class="img-fluid" alt="Create campaign">
         <h3 class="fw-bold my-4">You have no campaigns yet</h3>
-        <button type="button" class="btn btn-primary" @click="showListCampaigns = !showListCampaigns">
+        <button type="button" class="btn btn-lg btn-info" @click="showListCampaigns = !showListCampaigns">
+          <font-awesome-icon icon="fa-solid fa-hourglass-start" class="me-2" />
           Start a campaign
         </button>
       </div>
@@ -89,7 +92,7 @@ export default {
       // Campaigns that were runned at least once
       // and then paused afterwards
       return _.filter(this.campaigns, (item) => {
-        return item.runned && !item.paused
+        return item.runned && item.paused
       })
     },
     drafts () {
@@ -103,23 +106,23 @@ export default {
       switch (this.currentTab) {
         case 0:
           items = this.campaigns
-          break;
+          break
 
         case 1:
           items = this.paused
-          break;
+          break
 
         case 2:
           items = this.drafts
-          break;
+          break
         
         case 3:
           items = _.filter(this.campaigns, ['archived', true])
-          break;
+          break
       
         default:
           items = this.campaigns
-          break;
+          break
       }
       return items
     }

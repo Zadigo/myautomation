@@ -13,7 +13,8 @@ const router = createRouter({
           name: 'home_view',
           component: loadView('IndexView'),
           meta: {
-            title: 'Index'
+            title: 'Index',
+            showLink: true
           }
         },
         {
@@ -21,7 +22,8 @@ const router = createRouter({
           name: 'campaigns_view',
           component: loadView('CampaignsView'),
           meta: {
-            title: 'Campaigns'
+            title: 'Campaigns',
+            showLink: true
           }
         },
         {
@@ -38,7 +40,8 @@ const router = createRouter({
               name: 'campaign_setup_view',
               component: loadView('setup/CampaignSetupView'),
               meta: {
-                title: 'Create campaign'
+                title: 'Create campaign',
+                showLink: true
               }
             },
             {
@@ -46,7 +49,8 @@ const router = createRouter({
               name: 'campaign_setup_settings_view',
               component: loadView('setup/CampaignSettingsView'),
               meta: {
-                title: 'Campaign settings'
+                title: 'Campaign settings',
+                showLink: false
               }
             }
           ]
@@ -56,7 +60,8 @@ const router = createRouter({
           name: 'queue_view',
           component: loadView('QueueView'),
           meta: {
-            title: 'Queue'
+            title: 'Queue',
+            showLink: false
           }
         }
       ]

@@ -3,21 +3,9 @@
     <template #default>
       <div class="row">
         <div class="col-3">
-          <ul class="nav flex-column">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Active</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link disabled">Disabled</a>
-            </li>
-          </ul>
+          <base-nav-pills :items="navItems" />
         </div>
+
         <div class="col-9">
           <div class="row">
             <div v-for="campaign in store.availableCampaigns" :key="campaign.id" class="col-4">
@@ -43,12 +31,14 @@ import { useCampaigns } from '@/store/campaigns'
 
 import BaseCard from '@/layouts/bootstrap/cards/BaseCard.vue'
 import BaseModal from '@/layouts/bootstrap/BaseModal.vue'
+import BaseNavPills from '@/layouts/bootstrap/BaseNavPills.vue'
 
 export default {
   name: 'ModalListCampaigns',
   components: {
     BaseCard,
-    BaseModal
+    BaseModal,
+    BaseNavPills
   },
   props: {
     show: {
@@ -64,6 +54,18 @@ export default {
     const store = useCampaigns()
     return {
       store
+    }
+  },
+  data () {
+    return {
+      navItems: [
+        {
+          name: 'User selected'
+        },
+        {
+          name: 'Linkedin'
+        }
+      ]
     }
   }
 }

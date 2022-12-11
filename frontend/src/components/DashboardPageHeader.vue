@@ -3,7 +3,7 @@
     <base-card>
       <template #body>
         <div class="row">
-          <div class="col-lg-6">
+          <div class="col-sm-12 col-md-12">
             <div class="d-flex justify-content-between align-items-center">
               <h2 class="fw-bolder mb-0">
                 {{ title }}
@@ -27,7 +27,8 @@ export default {
   },
   props: {
     title: {
-      type: String
+      type: String,
+      required: true
     }
   }
 }
