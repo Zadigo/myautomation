@@ -1,0 +1,24 @@
+/* .navbar-vertical .navbar-nav > .nav-item .nav-link.router-link-exact-active {
+    color: #fff;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    background-color: hsla(0,0%,78%,.2);
+}
+
+.sidenav .collapse .nav-item .nav-link.router-link-exact-active,
+.sidenav .collapse .nav-item .nav-link.router-link-exact-active i {
+    color: #fff!important;
+}
+
+.navbar-vertical .navbar-nav .nav-link.router-link-exact-active {
+    font-weight: 400;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 10%), 0 2px 4px -1px rgb(0 0 0 / 6%);
+    border-radius: .375rem;
+    margin-top: 1.5px;
+    margin-bottom: 1.5px;
+}
+
+.navbar-nav .nav-link.router-link-exact-active,
+.navbar-nav .show > .nav-link {
+    color: rgba(52, 71, 103, .9);
+} */
