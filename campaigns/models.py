@@ -16,9 +16,10 @@ class Campaign(models.Model):
     results_per_search = models.PositiveIntegerField(
         default=100
     )
-    uploaded_csv_file = models.FileField(
+    csv_file = models.FileField(
         upload_to=upload_file_to,
         validators=[validate_csv_file],
+        help_text="A file used to parse a list of urls. Should have 'website' header",
         blank=True,
         null=True
     )
@@ -32,7 +33,16 @@ class Campaign(models.Model):
         help_text='List of proxies to use for the request',
         validators=[validate_proxies]
     )
+    section_to_parse = models.CharField(
+        max_length=100,
+        help_text='Only parse a specific section of the given HTML page',
+        blank=True,
+        null=True
+    )
     parse_all_tables = models.BooleanField(
+        default=False
+    )
+    parse_all_text = models.BooleanField(
         default=False
     )
     runned = models.BooleanField(

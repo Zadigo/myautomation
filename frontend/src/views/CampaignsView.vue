@@ -144,31 +144,32 @@ export default {
       // Get all the campaigns created by
       // the user
       try {
-        const cachedCampaigns = this.$session.retrieve('cachedCampaigns')
-        if (!cachedCampaigns) {
-          const response = await this.$http.get('campaigns/list')
-          this.$session.create('cachedCampaigns', response.data)
-          this.store.updateCampaigns(response.data)
-        } else {
-          this.store.updateCampaigns(cachedCampaigns)
-        }
-
+        const response = await this.$http.get('campaigns/list')
+        this.$session.create('cachedCampaigns', response.data)
+        this.store.updateCampaigns(response.data)
       } catch (error) {
         console.error(error)
       }
     },
     async launchCampaign (campaign) {
-      campaign.paused = !campaign.paused
-      campaign.archived = false
-      campaign.draft = false
-      campaign.runned = true
+      // campaign.paused = !campaign.paused
+      // campaign.archived = false
+      // campaign.draft = false
+      // campaign.runned = true
+      // try {
+      //   await this.$http.post(`campaigns/update/${campaign.id}/state`, {
+      //     paused: campaign.paused,
+      //     archived: campaign.archived,
+      //     draft: false,
+      //     runned: campaign.runned
+      //   })
+      // } catch (error) {
+      //   console.error(error)
+      // }
       try {
-        await this.$http.post('campaigns/state', {
-          pause: campaign.paused,
-          archived: campaign.archived,
-          draft: false,
-          runned: campaign.runned
-        })
+        campaign.paused = !campaign.paused
+        campaign.runned = true
+        await this.$http.post(`campaigns/run/${campaign.id}`)
       } catch (error) {
         console.error(error)
       }

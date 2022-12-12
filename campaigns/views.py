@@ -14,15 +14,19 @@ def list_campaign_view(request, **kwargs):
     query = request.GET
     campaigns = Campaign.objects.all()
     serialized_campaigns = CampaignSerializer(instance=campaigns, many=True)
-    return Response(data={'campaigns': serialized_campaigns.data, 'actions': []})
+    actions = [
+        {'name': 'GET', 'url': 'http://example.com'},
+        {'name': 'POST', 'url': 'http://example.com'}
+    ]
+    return Response(data={'campaigns': serialized_campaigns.data, 'actions': actions})
 
 
 @api_view(['post'])
 def create_campaign_view(request, **kwargs):
     """Creates a new campaign"""
-    campaign = CreateCampaignSerializer(data=request.data)
-    campaign.is_valid(raise_exception=True)
-    return campaign.save(request)
+    serializer = CreateCampaignSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    return serializer.save(request)
 
 
 @api_view(['post'])
@@ -71,4 +75,5 @@ def delete_campaign_view(request, campaign_id, **kwargs):
 @api_view(['post'])
 def change_campaign_state_view(request, campaign_id, **kwargs):
     serializer = CampaignStatus(data=request.data)
+    serializer.is_valid(raise_exception=True)
     return serializer.save()

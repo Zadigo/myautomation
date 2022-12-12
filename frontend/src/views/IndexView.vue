@@ -1,7 +1,17 @@
 <template>
   <section>
-    <div class="alert alert-info">
-      Coming soon
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="alert alert-info text-center">
+            <h1>This section will be coming soon!</h1>
+            <router-link :to="{ name: 'campaigns_view' }" class="btn btn-lg btn-primary mt-3">
+              <font-awesome-icon icon="fa-solid fa-star" class="me-2" />
+              Create your first campaign
+            </router-link>
+          </div>
+        </div>
+      </div>
     </div>
     <!-- <div class="row">
       <div class="col-12 position-relative z-index-2">

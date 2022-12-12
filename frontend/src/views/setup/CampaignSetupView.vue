@@ -43,12 +43,13 @@
               </div>
               
               <div v-if="!useFile" class="my-4">
-                <base-input id="campaign-url" v-model="newCampaign.url" placeholder="Type the url of website to parse" class="mb-2" />
+                <base-input id="campaign-urls" v-model="newCampaign.urls" placeholder="Type the url of website to parse" class="mb-2" />
               </div>
 
               <div v-else class="my-4">
                 <p class="text-muted">Ensure your file has the following fields: website</p>
-                <base-input id="campaign-urls" v-model="newCampaign.urls_file" type="file" class="mb-2" />
+                <input id="campaign-csv-file" type="file" class="form-control" @change="handleUpload($event)">
+                <!-- <base-input id="campaign-csv-file" v-model="newCampaign.csv_file" type="file" class="mb-2" /> -->
               </div>
 
 
@@ -101,13 +102,10 @@ export default {
     this.store.useCampaignSetup(this.$route.params.id)
   },
   methods: {
-    // goToNext () {
-    //   // Save the campaign in the user session. This stays until
-    //   // the user completes all the steps and creates the campaign
-    //   this.$session.create('draftCampaign', this.store.newCampaign)
-    //   this.$router.push({ name: 'custom_campaign_setup_view', params: { id: this.$route.params.id } })
-    //   // this.$router.push({ name: 'campaign_setup_settings_view', params: { id: this.$route.params.id } })
-    // }
+    handleUpload (e) {
+      const files = e.target.files
+      this.store.newCampaign.csv_file = files
+    }
   }
 }
 </script>

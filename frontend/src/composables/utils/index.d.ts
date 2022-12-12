@@ -32,6 +32,8 @@ declare function useSocket (): {
 }
 
 declare function useUtilities (): {
+    /** Create a random string */
+    getRandomString(k: number = 10): string
     /** Check if a list of items has null values */
     hasNull (items: []): boolean
     /** Adds an "id" attribute to each item in a list of items */

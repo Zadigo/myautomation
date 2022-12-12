@@ -6,7 +6,9 @@
           <div class="card-body d-flex justify-content-between align-items-center">
             <h2 class="fw-bold"><router-link :to="{ name: 'campaigns_view' }" class="text-primary">Campaign</router-link> / {{ currentCampaign.name }}</h2>
             <div class="btn-group">
-              <button type="button" class="btn btn-primary">Play</button>
+              <button type="button" class="btn btn-primary" @click="launchCampaign(currentCampaign)">
+                <font-awesome-icon icon="fa-solid fa-play" />
+              </button>
               <button type="button" class="btn btn-primary">Play</button>
             </div>
           </div>
@@ -24,7 +26,7 @@
       <div class="col-sm-12 col-md-8 mt-2">
         <base-template-card>
           <div class="card-body">
-            <table class="table"></table>
+            {{ scrapResult }}
           </div>
         </base-template-card>
       </div>
@@ -35,6 +37,7 @@
 <script>
 import { useCampaigns } from '@/store/campaigns'
 import { mapState } from 'pinia'
+import { useCampaignComposable } from '@/composables/campaigns'
 
 import BaseTemplateCard from '@/layouts/bootstrap/cards/BaseTemplateCard.vue'
 
@@ -44,9 +47,12 @@ export default {
     BaseTemplateCard
   },
   setup () {
+    const { launchCampaign, scrapResult } = useCampaignComposable()
     const store = useCampaigns()
     return {
-      store
+      store,
+      scrapResult,
+      launchCampaign
     }
   },
   computed: {

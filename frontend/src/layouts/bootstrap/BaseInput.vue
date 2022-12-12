@@ -17,7 +17,7 @@ export default {
       default: 'text'
     },
     modelValue: {
-      type: String
+      type: [String, Number, Boolean]
     }
   },
   emits: {

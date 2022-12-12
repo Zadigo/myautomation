@@ -1,6 +1,6 @@
 import _, { toNumber } from 'lodash'
 import { defineStore } from 'pinia'
-import { useUtilities } from '@/composables/utils'
+// import { useUtilities } from '@/composables/utils'
 // TODO: Rename to custom_campaigns
 import availableCampaigns from '@/data/available_campaigns.json'
 
@@ -11,16 +11,13 @@ const useCampaigns = defineStore('campaigns', {
     currentCampaign: {},
     newCampaign: {
       name: null,
-      url: null,
+      urls: null,
       results_per_search: 100,
-      file: null,
+      csv_file: null,
       retries: 0,
       section_to_parse: null,
       parse_all_tables: false,
       parse_all_text: false,
-      runned: false,
-      paused: true,
-      archived: false,
       draft: true
     },
     campaigns: [],
@@ -53,30 +50,19 @@ const useCampaigns = defineStore('campaigns', {
         this.currentCampaign = campaign
       }
     },
-    createCampaign () {
-      // Create a new scrapping campaign
-      const { incrementLastId } = useUtilities()
-      const value = incrementLastId(this.campaigns)
-      this.newCampaign.id = value
-      this.campaigns.push(this.newCampaign)
-      this.resetNewCampaign()
-    },
     useCampaignSetup (id) {
       this.selectedCampaignSetup = _.find(this.availableCampaigns, ['id', toNumber(id)])
     },
     resetNewCampaign () {
       this.newCampaign = {
         name: null,
-        url: null,
+        urls: null,
         results_per_search: 100,
-        file: null,
+        csv_file: null,
         retries: 0,
         section_to_parse: null,
         parse_all_tables: false,
         parse_all_text: false,
-        runned: false,
-        paused: true,
-        archived: false,
         draft: true
       }
     }

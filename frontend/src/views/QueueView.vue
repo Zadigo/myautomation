@@ -18,9 +18,14 @@
           <base-card>
             <template #body>
               <base-list-group>
-                <base-list-group-item v-for="action in actions" :key="action.id">
-                  <span class="fw-bold">GET</span> /
-                  <span>Some action to show</span>
+                <base-list-group-item v-for="action in actions" :key="action.id" class="d-flex justify-content-between align-items-center">
+                  <div class="info">
+                    <span :class="actionColor(action.name)" class="fw-bold">{{ action.name }}</span> /
+                    <span>{{ action.url }}</span>
+                  </div>
+                  <div class="badge badge-pill badge-success">
+                    Completed
+                  </div>
                 </base-list-group-item>
               </base-list-group>
             </template>
@@ -197,9 +202,23 @@ export default {
   computed: {
     ...mapState(useCampaigns, ['actions'])
   },
+  beforeMount () {
+    this.store.loadFromCache(this.$route.params.id)
+  },
   methods: {
     changePage (index) {
       index
+    },
+    actionColor (name) {
+      if (name === 'GET') {
+        return 'text-primary'
+      }
+
+      if (name === 'POST') {
+        return 'text-danger'
+      }
+
+      return 'text-primary'
     }
   }
 }

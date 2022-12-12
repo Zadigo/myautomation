@@ -26,6 +26,16 @@ export function asyncTimeout (ms) {
 }
 
 export function useUtilities () {
+  function getRandomString (k = 10) {
+    let result = ''
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    const charactersLength = characters.length
+    for (let i = 0; i < k; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength))
+    }
+    return result
+  }
+
   function hasNull (items) {
     let itemsValues = []
 
@@ -216,6 +226,7 @@ export function useUtilities () {
     dictionnaryExists,
     dictionnaryListManager,
     formatAsPercentage,
+    getRandomString,
     getVerticalScrollPercentage,
     getVideoFrame,
     hasNull,

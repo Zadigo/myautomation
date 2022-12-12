@@ -12,13 +12,17 @@
             <template #body>
               <div class="w-50">
                 <label for="select-section" class="fw-bold">Choose the section of the page to parse</label>
-                <base-input id="select-section" v-model="store.newCampaign.section_to_parse" :disabled="store.newCampaign.parse_all_tables" />
+                <base-input id="select-section" v-model="store.newCampaign.section_to_parse" :disabled="store.newCampaign.parse_all_tables || store.newCampaign.parse_all_text" />
               </div>
               
               <div class="mt-4">
-                <base-checkbox id="select-parse-all-tables" v-model="store.newCampaign.parse_all_tables" label="Parse all the tables on the page" is-switch />
-                <base-checkbox id="select-parse-all-text" v-model="store.newCampaign.parse_all_text" label="Parse all the text on the page" is-switch class="my-2" />
-                <p v-if="store.newCampaign.parse_all_tables" class="alert alert-info my-2">This might return some incoherent data</p>
+                <base-checkbox id="select-parse-all-tables" v-model="store.newCampaign.parse_all_tables" :disabled="store.newCampaign.parse_all_text" label="Parse all the tables on the page" is-switch />
+                <base-checkbox id="select-parse-all-text" v-model="store.newCampaign.parse_all_text" :disabled="store.newCampaign.parse_all_tables" class="my-3" label="Parse all the text on the page" is-switch />
+                <p v-if="store.newCampaign.parse_all_text" class="alert alert-info my-2">
+                  <font-awesome-icon icon="fa-solid fa-circle-info" class="me-2" />
+                  Choosing this option might have the scrapper return some incoherent items
+                  in your dataset
+                </p>
               </div>
             </template>
 

@@ -1,6 +1,6 @@
 <template>
-  <div :class="[isSwitch ? 'form-switch' : 'form-check', inline ? 'form-check-inline' : null]">
-    <input :id="id" v-model="value" :class="inputClasses" :checked="value" :type="checkboxType" :role="[ isSwitch ? 'switch' : null]" :name="name" class="form-check-input">
+  <div :class="[isSwitch ? 'form-switch' : 'form-check', { 'form-check-inline': inline }]">
+    <input :id="id" :class="inputClasses" :disabled="disabled" :checked="modelValue" :type="checkboxType" :role="[isSwitch ? 'switch' : null ]" :name="name" class="form-check-input" @change="emitValue($event)">
     <label :for="id" class="form-check-label">{{ label }}</label>
   </div>
 </template>
@@ -14,6 +14,9 @@ export default {
     id: {
       type: String,
       required: true
+    },
+    disabled: {
+      type: Boolean
     },
     // bigger: {
     //   type: Boolean
@@ -29,9 +32,8 @@ export default {
       type: Boolean,
       default: false
     },
-    initial: {
-      type: Boolean,
-      default: false
+    modelValue: {
+      type: Boolean
     },
     label: {
       type: String,
@@ -42,7 +44,7 @@ export default {
     }
   },
   emits: {
-    'update:initial' () {
+    'update:modelValue' () {
       return true
     }
   },
@@ -53,14 +55,6 @@ export default {
     }
   },
   computed: {
-    value: {
-      get () {
-        return this.initial
-      },
-      set (value) {
-        this.$emit('update:initial', value)
-      }
-    },
     inputClasses () {
       return [
         // {
@@ -83,16 +77,12 @@ export default {
       }
     }
   },
-  mounted () {
-    if (this.initial) {
-      this.value = true
+  methods: {
+    emitValue (e) {
+      // https://stackoverflow.com/questions/70515367/passing-v-model-into-a-checkbox-inside-a-component-in-vue-3
+      this.$emit('update:modelValue', e.target.checked)
     }
   }
-  // methods: {
-  //   emitValue (e) {
-  //     this.$emit('update:modelValue', e.target.value)
-  //   }
-  // }
 }
 </script>
 
