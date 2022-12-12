@@ -27,6 +27,15 @@ const router = createRouter({
           }
         },
         {
+          path: 'campaign/:id(\\d+)',
+          name: 'campaign_view',
+          component: loadView('CampaignView'),
+          meta: {
+            title: 'Campaign',
+            showLink: true
+          }
+        },
+        {
           path: 'campaigns/setup/',
           component: loadLayout ('CampaignsLayout'),
           children: [
@@ -42,6 +51,14 @@ const router = createRouter({
               meta: {
                 title: 'Create campaign',
                 showLink: true
+              }
+            },
+            {
+              path: ':id(\\d+)/custom-setup',
+              name: 'custom_campaign_setup_view',
+              component: loadView('setup/CustomCampaignSetupView'),
+              meta: {
+                title: 'Custom campaign settings'
               }
             },
             {

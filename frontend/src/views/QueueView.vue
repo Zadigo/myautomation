@@ -3,6 +3,7 @@
     <div class="row">
       <dashboard-page-header title="Queue" />
 
+      <!-- Navigation -->
       <div class="col-12 my-3">
         <base-nav-pills :items="navpillChoices" @current-tab="changePage" />
       </div>
@@ -14,10 +15,20 @@
         </div>
 
         <div v-else class="col-8">
-          
+          <base-card>
+            <template #body>
+              <base-list-group>
+                <base-list-group-item v-for="action in actions" :key="action.id">
+                  <span class="fw-bold">GET</span> /
+                  <span>Some action to show</span>
+                </base-list-group-item>
+              </base-list-group>
+            </template>
+          </base-card>
         </div>
 
-        <div id="limits" class="col-4">
+        <!-- Limits -->
+        <aside id="limits" class="col-4 d-none">
           <h3>Quotas journaliers</h3>
           <p class="text-muted">Ces quotas sont mis à jour quotidiennement.</p>
 
@@ -140,24 +151,36 @@
               </div>
             </template>
           </base-card>
-        </div>
+        </aside>
       </div>
     </div>
   </section>
 </template>
 
 <script>
+import { useCampaigns } from '@/store/campaigns'
+import { mapState } from 'pinia'
+
 import BaseCard from '@/layouts/bootstrap/cards/BaseCard.vue'
+import BaseListGroup from '@/layouts/bootstrap/listgroup/BaseListGroup.vue'
+import BaseListGroupItem from '@/layouts/bootstrap/listgroup/BaseListGroupItem.vue'
 import BaseNavPills from '@/layouts/bootstrap/nav/BaseNavPills.vue'
 import DashboardPageHeader from '@/components/DashboardPageHeader.vue'
-import { useCampaigns } from '@/store/campaigns'
 
 export default {
   name: 'QueueView',
   components: {
     BaseCard,
+    BaseListGroup,
+    BaseListGroupItem,
     BaseNavPills,
     DashboardPageHeader
+  },
+  setup () {
+    const store = useCampaigns()
+    return {
+      store
+    }
   },
   data () {
     return {
@@ -171,11 +194,8 @@ export default {
       ]
     }
   },
-  setup () {
-    const store = useCampaigns()
-    return {
-      store
-    }
+  computed: {
+    ...mapState(useCampaigns, ['actions'])
   },
   methods: {
     changePage (index) {

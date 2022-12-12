@@ -1,9 +1,10 @@
 import csv
+import time
 
 import requests
 from algorithm import html_models
+from algorithm.utils import get_random_header, get_default_proxies
 from bs4 import BeautifulSoup
-import time
 from nltk.tokenize import TweetTokenizer
 
 # from django.core.files import File
@@ -56,7 +57,7 @@ class RequestQueue:
         self._urls = []
 
     def __get__(self, instance, cls=None):
-        self._urls = instance.campaign_urls
+        self._urls = instance.campaign.campaign_urls
         return [HTTPRequest(url) for url in self._urls]
 
 
@@ -65,10 +66,8 @@ class BaseRequestor:
 
     def __init__(self, campaign):
         self.campaign = campaign
-
-    @property
-    def campaign_urls(self):
-        return self.campaign.urls.split(',')
+        self._proxies = []
+        self._headers = {}
 
     def resolve_all(self):
         items = []
@@ -92,7 +91,7 @@ class CleaningMixin:
 class Algorithm(CleaningMixin):
     requestor_class = BaseRequestor
 
-    def __init__(self, campaign, proxies=[]):
+    def __init__(self, campaign, proxies=[], headers={}):
         self.requestor = self.requestor_class(campaign)
 
     def parse_tables(self):

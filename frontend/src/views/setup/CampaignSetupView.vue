@@ -52,10 +52,10 @@
               </div>
 
 
-              <router-link :to="{ name: 'campaign_setup_settings_view', params: { id: 1 } }" class="btn btn-primary">
+              <button type="button" class="btn btn-primary" @click="goToNext({ name: 'custom_campaign_setup_view', params: { id: $route.params.id } })">
                 Next
                 <font-awesome-icon icon="fa-solid fa-arrow-right" class="ms-2" />
-              </router-link>
+              </button>
             </template>
           </base-card>
         </div>
@@ -67,6 +67,8 @@
 <script>
 import { mapWritableState } from 'pinia'
 import { useCampaigns } from '@/store/campaigns'
+import { getCurrentInstance } from 'vue'
+import { useNavigation } from '@/composables/navigation'
 
 import BaseCard from '@/layouts/bootstrap/cards/BaseCard.vue'
 import BaseTemplateCard from '@/layouts/bootstrap/cards/BaseTemplateCard.vue'
@@ -79,9 +81,12 @@ export default {
     BaseInput
   },
   setup () {
+    const app = getCurrentInstance()
+    const { goToNext } = useNavigation(app)
     const store = useCampaigns()
     return {
-      store
+      store,
+      goToNext
     }
   },
   data () {
@@ -94,6 +99,15 @@ export default {
   },
   created () {
     this.store.useCampaignSetup(this.$route.params.id)
+  },
+  methods: {
+    // goToNext () {
+    //   // Save the campaign in the user session. This stays until
+    //   // the user completes all the steps and creates the campaign
+    //   this.$session.create('draftCampaign', this.store.newCampaign)
+    //   this.$router.push({ name: 'custom_campaign_setup_view', params: { id: this.$route.params.id } })
+    //   // this.$router.push({ name: 'campaign_setup_settings_view', params: { id: this.$route.params.id } })
+    // }
   }
 }
 </script>

@@ -26,11 +26,12 @@
         <base-card>
           <template #body>
             <base-list-group>
-              <base-list-group-item-action v-for="campaign in sortedCampaigns" :key="campaign.id" class="d-flex justify-content-between align-items-center">
-                <span>{{ campaign.name }}</span>
-                <button type="button" class="btn btn-sm btn-primrary m-0 btn-float" @click="launchCampaign(campaign)">
-                  <font-awesome-icon v-if="campaign.paused" icon="fa-solid fa-play" />
+              <base-list-group-item-action v-for="campaign in sortedCampaigns" :key="campaign.id" class="d-flex justify-content-between align-items-center p-3">
+                <span @click="goToCampaign(campaign)">{{ campaign.name }}</span>
+                <button type="button" class="btn btn-sm btn-light m-0 btn-float shadow-none" @click="launchCampaign(campaign)">
+                  <font-awesome-icon v-if="campaign.paused || !campaign.runned" icon="fa-solid fa-play" />
                   <font-awesome-icon v-else icon="fa-solid fa-stop" />
+                  <base-spinner color="dark" size="sm" class="d-none" />
                 </button>
               </base-list-group-item-action> 
             </base-list-group>
@@ -39,7 +40,7 @@
       </div>
 
       <!-- Modals -->
-      <modal-list-campaigns id="setup-campaign" :show="showListCampaigns" @close="showListCampaigns = false" size="xl" />
+      <modal-list-campaigns id="setup-campaign" :show="showListCampaigns" size="xl" @close="showListCampaigns = false" />
     </div>
   </section>
 </template>
@@ -54,6 +55,7 @@ import BaseNavPills from '@/layouts/bootstrap/nav/BaseNavPills.vue'
 import DashboardPageHeader from '@/components/DashboardPageHeader.vue'
 import BaseListGroup from '@/layouts/bootstrap/listgroup/BaseListGroup.vue'
 import BaseListGroupItemAction from '@/layouts/bootstrap/listgroup/BaseListGroupItemAction.vue'
+import BaseSpinner from '@/layouts/bootstrap/BaseSpinner.vue'
 import ModalListCampaigns from '@/components/ModalListCampaigns.vue'
 
 export default {
@@ -63,8 +65,15 @@ export default {
     BaseListGroup,
     BaseListGroupItemAction,
     BaseNavPills,
+    BaseSpinner,
     DashboardPageHeader,
     ModalListCampaigns
+  },
+  setup () {
+    const store = useCampaigns()
+    return {
+      store
+    }
   },
   data () {
     return {
@@ -127,15 +136,49 @@ export default {
       return items
     }
   },
+  beforeMount () {
+    this.getCampaigns()
+  },
   methods: {
-    changePage (index) {
-      this.currentTab = index
+    async getCampaigns () {
+      // Get all the campaigns created by
+      // the user
+      try {
+        const cachedCampaigns = this.$session.retrieve('cachedCampaigns')
+        if (!cachedCampaigns) {
+          const response = await this.$http.get('campaigns/list')
+          this.$session.create('cachedCampaigns', response.data)
+          this.store.updateCampaigns(response.data)
+        } else {
+          this.store.updateCampaigns(cachedCampaigns)
+        }
+
+      } catch (error) {
+        console.error(error)
+      }
     },
-    launchCampaign (campaign) {
+    async launchCampaign (campaign) {
       campaign.paused = !campaign.paused
       campaign.archived = false
       campaign.draft = false
       campaign.runned = true
+      try {
+        await this.$http.post('campaigns/state', {
+          pause: campaign.paused,
+          archived: campaign.archived,
+          draft: false,
+          runned: campaign.runned
+        })
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    changePage (index) {
+      this.currentTab = index
+    },
+    goToCampaign (campaign) {
+      this.store.setCurrentCampaign(campaign)
+      this.$router.push({ name: 'campaign_view', params: { id: campaign.id } })
     }
   }
 }

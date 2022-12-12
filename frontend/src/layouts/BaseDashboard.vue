@@ -95,6 +95,11 @@ export default {
           title: 'Campaigns',
           to: 'campaigns_view',
           icon: 'table'
+        },
+        {
+          title: 'Queue',
+          to: 'queue_view',
+          icon: 'bolt-lightning'
         }
       ]
     }

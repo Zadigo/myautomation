@@ -16,18 +16,6 @@
     
             <base-list-group-checkbox :items="scrapChoices" @list-group-selection="handleSelection" />
           </template>
-          
-          <template #footer>
-            <router-link :to="{ name: 'campaign_setup_view', params: { id: $route.params.id } }" class="btn btn-primary">
-              <font-awesome-icon icon="fa-solid fa-arrow-left" class="me-2" />
-              Back
-            </router-link>
-            
-            <button type="button" class="btn btn-primary mx-2" @click="createCampaign">
-              Create campaign
-              <font-awesome-icon icon="fa-solid fa-arrow-right" class="ms-2" />
-            </button>
-          </template>
         </base-card>
       </div>
 
@@ -35,9 +23,31 @@
         <base-card>
           <template #body>
             <p class="fw-bold">Proxies</p>
-            <base-input id="select-proxies" placeholder="Type a list of proxies separated by commas" />
+            <base-input id="select-proxies" v-model="store.newCampaign.proxies" placeholder="Type a list of proxies separated by commas" />
+            
             <p class="fw-bold mt-4">Maximum number of retries</p>
-            <base-input id="select-proxies" min="0" max="10" />
+            <base-input id="select-retries" v-model="store.newCampaign.retries" min="0" max="10" />
+          </template>
+        </base-card>
+      </div>
+
+      <div class="col-sm-12 col-md-12 mt-2">
+        <base-card>
+          <template #body>
+            <button type="button" class="btn btn-primary" @click="goToPrevious">
+              <font-awesome-icon icon="fa-solid fa-arrow-left" class="me-2" />
+              Back
+            </button>
+          
+            <button type="button" class="btn btn-secondary mx-2" @click="createCampaign">
+              <font-awesome-icon icon="fa-solid fa-cloud-arrow-up" class="me-2" />
+              Save draft
+            </button>
+
+            <button type="button" class="btn btn-primary mx-2" @click="createCampaign">
+              Create campaign
+              <font-awesome-icon icon="fa-solid fa-arrow-right" class="ms-2" />
+            </button>
           </template>
         </base-card>
       </div>
@@ -79,12 +89,26 @@ export default {
     }
   },
   methods: {
-    createCampaign () {
+    async createCampaign () {
+      // Create a new campaign
+      this.store.newCampaign.draft = false
       this.store.createCampaign()
+      this.$session.remove('newCampaign')
       this.$router.push({ name: 'campaigns_view' })
+
+      try {
+        const response = await this.$http.post('/campaigns/create', this.store.newCampaign)
+        this.store.updateCampaigns(response.data)
+      } catch (error) {
+        console.log(error)
+      }
     },
     handleSelection (value) {
       value
+    },
+    goToPrevious () {
+      this.$session.create('draftCampaign', this.store.newCampaign)
+      this.$router.push({ name: 'campaign_setup_view', params: { id: this.$route.params.id } })
     }
   }
 }

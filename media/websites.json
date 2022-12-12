@@ -1,6 +1,12 @@
 [
     {
         "url": "pagesjaunes.fr",
-        "section": null
+        "section": null,
+        "attrs": null
+    },
+    {
+        "url": "example.com",
+        "section": "h1",
+        "attrs": null
     }
 ]
