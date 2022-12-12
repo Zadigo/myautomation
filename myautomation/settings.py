@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'daphne',
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
@@ -66,6 +67,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'myautomation.wsgi.application'
+
+# ASGI_APPLICATION = 'myautomation.asgi.application'
 
 
 # Database
@@ -166,3 +169,18 @@ LANGUAGES = [
     ('en', _('English')),
     ('fr', _('French'))
 ]
+
+
+# Channels
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer'
+    }
+    # 'default': {
+    #     'BACKEND': 'channels_redis.core.RedisChannelLayer',
+    #     'CONFIG': {
+    #         "hosts": [('127.0.0.1', 6379)],
+    #     }
+    # }
+}
