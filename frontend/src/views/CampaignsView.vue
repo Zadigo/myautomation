@@ -101,7 +101,7 @@ export default {
       // Campaigns that were runned at least once
       // and then paused afterwards
       return _.filter(this.campaigns, (item) => {
-        return item.runned && item.paused
+        return !item.runned
       })
     },
     drafts () {
@@ -114,7 +114,7 @@ export default {
       let items
       switch (this.currentTab) {
         case 0:
-          items = this.campaigns
+          items = _.filter(this.campaigns, ['runned', true])
           break
 
         case 1:

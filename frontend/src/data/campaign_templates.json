@@ -1,0 +1,9 @@
+[
+    {
+        "id": 1,
+        "name": "User selected website",
+        "description": "Srap any website of your choice",
+        "premium": false,
+        "free_form": true
+    }
+]

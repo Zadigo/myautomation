@@ -50,7 +50,7 @@ const router = createRouter({
               component: loadView('setup/CampaignSetupView'),
               meta: {
                 title: 'Create campaign',
-                showLink: true
+                requiresPremium: true
               }
             },
             {
@@ -58,7 +58,8 @@ const router = createRouter({
               name: 'custom_campaign_setup_view',
               component: loadView('setup/CustomCampaignSetupView'),
               meta: {
-                title: 'Custom campaign settings'
+                title: 'Custom campaign settings',
+                requiresPremium: true
               }
             },
             {
@@ -67,7 +68,7 @@ const router = createRouter({
               component: loadView('setup/CampaignSettingsView'),
               meta: {
                 title: 'Campaign settings',
-                showLink: false
+                requiresPremium: false
               }
             }
           ]

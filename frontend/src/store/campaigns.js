@@ -2,12 +2,12 @@ import _, { toNumber } from 'lodash'
 import { defineStore } from 'pinia'
 // import { useUtilities } from '@/composables/utils'
 // TODO: Rename to custom_campaigns
-import availableCampaigns from '@/data/available_campaigns.json'
+import campaignTemplates from '@/data/campaign_templates.json'
 
 const useCampaigns = defineStore('campaigns', {
   state: () => ({
     selectedCampaignSetup: {},
-    availableCampaigns: availableCampaigns,
+    campaignTemplates: campaignTemplates,
     currentCampaign: {},
     newCampaign: {
       name: null,
