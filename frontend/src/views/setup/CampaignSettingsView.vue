@@ -9,15 +9,6 @@
             <div class="w-50">
               <base-input id="campaign-reasults-per-search" v-model="store.newCampaign.results_per_search" type="number" min="1" placeholder="100" />
             </div>
-    
-            <div class="alert alert-info my-4">
-              <font-awesome-icon icon="fa-solid fa-info-circle" class="me-2" />
-              Pick at least one item that you would like to scrape. Note that only
-              the selected items will be returned when selecting one or many of
-              these options
-            </div>
-    
-            <base-list-group-checkbox id="scrap-choices" :items="scrapChoices" @list-group-selection="handleSelection" />
           </template>
         </base-card>
       </div>
@@ -65,13 +56,11 @@ import { useNavigation } from '@/composables/navigation'
 
 import BaseCard from '@/layouts/bootstrap/cards/BaseCard.vue'
 import BaseInput from '@/layouts/bootstrap/BaseInput.vue'
-import BaseListGroupCheckbox from '@/layouts/bootstrap/listgroups/BaseListGroupCheckbox.vue'
 
 export default {
   components: {
     BaseCard,
-    BaseInput,
-    BaseListGroupCheckbox
+    BaseInput
   },
   setup () {
     const app = getCurrentInstance()
@@ -84,16 +73,6 @@ export default {
   },
   data () {
     return {
-      scrapChoices: [
-        {
-          name: 'Emails',
-          subtitle: 'Get emails'
-        },
-        {
-          name: 'Telephone',
-          subtitle: 'Get telephone numbers'
-        }
-      ]
     }
   },
   methods: {
@@ -109,9 +88,6 @@ export default {
       } catch (error) {
         console.log(error)
       }
-    },
-    handleSelection (value) {
-      value
     }
   }
 }

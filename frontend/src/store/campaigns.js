@@ -15,9 +15,10 @@ const useCampaigns = defineStore('campaigns', {
       results_per_search: 100,
       csv_file: null,
       retries: 0,
+      data_constraint: [],
       section_to_parse: null,
       parse_all_tables: false,
-      parse_all_text: false,
+      parse_all_text: true,
       draft: true
     },
     campaigns: [],

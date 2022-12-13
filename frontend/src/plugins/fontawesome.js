@@ -1,5 +1,5 @@
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faArrowLeft, faArrowRight, faBell, faBoltLightning, faCircleInfo, faCloud, faCloudArrowUp, faCog, faEye, faHome, faHourglassStart, faICursor, faPlay, faPlus, faStar, faStop, faTable, faTrash, faUpload } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft, faArrowRight, faBell, faBoltLightning, faCircleInfo, faCloud, faCloudArrowUp, faCog, faEye, faHome, faHourglassStart, faICursor, faListCheck, faPlay, faPlus, faStar, faStop, faTable, faTrash, faUpload } from '@fortawesome/free-solid-svg-icons'
 
 library.add(faArrowLeft)
 library.add(faArrowRight)
@@ -13,6 +13,7 @@ library.add(faEye)
 library.add(faHome)
 library.add(faHourglassStart)
 library.add(faICursor)
+library.add(faListCheck)
 library.add(faPlay)
 library.add(faPlus)
 library.add(faStop)

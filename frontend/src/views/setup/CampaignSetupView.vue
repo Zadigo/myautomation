@@ -11,6 +11,14 @@
                 rerum dicta consequatur molestiae at placeat ipsa. Eum nihil ullam necessitatibus.
               </p>
               <base-input id="campaign-name" v-model="newCampaign.name" placeholder="Campaign name" />
+              
+              <div class="mt-4">
+                <div class="alert alert-info">
+                  <font-awesome-icon icon="fa-solid fa-info-circle" class="me-2" />
+                  You can load a campaign that you previously started and continue editing it
+                </div>
+                <button type="button" class="btn btn-info mt-1 disabled">Load started campaign</button>
+              </div>
             </template>
           </base-card>
         </div>
@@ -43,15 +51,19 @@
               </div>
               
               <div v-if="!useFile" class="my-4">
-                <base-input id="campaign-urls" v-model="newCampaign.urls" placeholder="Type the url of website to parse" class="mb-2" />
+                <base-input id="campaign-urls" v-model="newCampaign.urls" placeholder="Url of the website to parse" class="mb-2" />
+
+                <div class="alert alert-danger mt-2 d-none">
+                  <font-awesome-icon icon="fa-solid fa-info-circle" class="me-2" />
+                  <a href>Some websites</a> are not handled. You need to change the url and choose
+                  from the list of valid websites to tuse
+                </div>
               </div>
 
               <div v-else class="my-4">
                 <p class="text-muted">Ensure your file has the following fields: website</p>
                 <input id="campaign-csv-file" type="file" class="form-control" @change="handleUpload($event)">
-                <!-- <base-input id="campaign-csv-file" v-model="newCampaign.csv_file" type="file" class="mb-2" /> -->
               </div>
-
 
               <button type="button" class="btn btn-primary" @click="goToNext({ name: 'custom_campaign_setup_view', params: { id: $route.params.id } })">
                 Next
@@ -96,7 +108,10 @@ export default {
     }
   },
   computed: {
-    ...mapWritableState(useCampaigns, ['newCampaign'])
+    ...mapWritableState(useCampaigns, ['newCampaign']),
+    hasInvalidUrls () {
+      return false
+    }
   },
   created () {
     this.store.useCampaignSetup(this.$route.params.id)

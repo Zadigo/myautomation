@@ -73,7 +73,7 @@ class Campaign(models.Model):
         default=False
     )
     parse_all_text = models.BooleanField(
-        default=False
+        default=True
     )
     runned = models.BooleanField(
         default=False,

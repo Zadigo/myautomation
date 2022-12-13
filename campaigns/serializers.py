@@ -53,12 +53,13 @@ class CampaignSerializer(Serializer):
 class CreateCampaignSerializer(Serializer):
     name = fields.CharField()
     urls = fields.CharField(allow_null=True)
+    # data_constraint = fields.ListField()
     results_per_search = fields.IntegerField(default=100)
     csv_file = fields.FileField(allow_null=True)
     retries = fields.IntegerField(default=0)
     section_to_parse = fields.CharField(allow_null=True)
     parse_all_tables = fields.BooleanField(default=False)
-    parse_all_text = fields.BooleanField(default=False)
+    parse_all_text = fields.BooleanField(default=True)
     draft = fields.BooleanField(default=True)
 
     def save(self, request, **kwargs):
