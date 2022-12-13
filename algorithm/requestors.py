@@ -3,7 +3,8 @@ import time
 
 import requests
 from algorithm import html_models
-from algorithm.utils import get_random_header, get_default_proxies
+from algorithm.mixins import CleaningMixin
+from algorithm.utils import get_default_proxies, get_random_header
 from bs4 import BeautifulSoup
 from nltk.tokenize import TweetTokenizer
 
@@ -15,6 +16,7 @@ class HTTPRequest:
         self.url = url
         self.response = None
         self.resolved = False
+        self.errors = []
 
     def __repr__(self):
         return f'{self.__class__.__name__}(url={self.url}, resolved={self.resolved})'
@@ -25,10 +27,16 @@ class HTTPRequest:
             url=self.url,
             headers=self.prepare_headers()
         )
-        response = session.send(prepared_request)
-        if response.status_code == 200:
-            self.resolved = True
-            self.response = response.content
+        try:
+            response = session.send(prepared_request)
+        except Exception as e:
+            self.errors.append(e.args)
+        else:
+            if response.status_code == 200:
+                self.resolved = True
+                self.response = response.content
+            else:
+                self.errors.append((f'Request failed with code {response.status_code}'))
 
     def prepare_headers(self, **headers):
         return {
@@ -54,19 +62,21 @@ class HTTPRequest:
 
 class RequestQueue:
     def __init__(self):
-        self._urls = []
+        self.urls = []
 
     def __get__(self, instance, cls=None):
-        self._urls = instance.campaign.campaign_urls
-        return [HTTPRequest(url) for url in self._urls]
+        # Get the urls that we are going to use
+        # in order to parse their pages
+        self.urls = instance.campaign.campaign_urls
+        return [HTTPRequest(url) for url in self.urls]
 
 
-class BaseRequestor:
+class Algorithm(CleaningMixin):
     request_queue = RequestQueue()
 
-    def __init__(self, campaign):
+    def __init__(self, campaign, proxies=[]):
         self.campaign = campaign
-        self._proxies = []
+        self.proxies = get_default_proxies()
         self._headers = {}
 
     def resolve_all(self):
@@ -78,23 +88,15 @@ class BaseRequestor:
                 items.append(BeautifulSoup(request.response, 'html.parser'))
         return items
 
-
-class CleaningMixin:
-    def deep_clen(self, value):
-        return value
-
-    def clean(self, value):
-        value = value.strip()
-        return self.deep_clen(value)
-
-
-class Algorithm(CleaningMixin):
-    requestor_class = BaseRequestor
-
-    def __init__(self, campaign, proxies=[], headers={}):
-        self.requestor = self.requestor_class(campaign)
+    def parse_all_text(self):
+        """Returns all the text from a given page"""
+        soups = self.resolve_all()
+        for soup in soups:
+            yield soup.get_text()
 
     def parse_tables(self):
+        """Returns all the data present in all
+        the tables from a given page"""
         for soup in self.resolve_all():
             tables = soup.find_all('table')
             if len(tables) == 0:
@@ -103,8 +105,10 @@ class Algorithm(CleaningMixin):
                 yield html_models.TableObject(table)
 
     def parse_distinct(self, tag=None, **attrs):
+        """Parse a distinct element on the
+        given HTML page"""
         instance = TweetTokenizer()
-        soups = self.requestor.resolve_all()
+        soups = self.resolve_all()
         for soup in soups:
             item = soup.find(tag, **attrs)
             if item is None:

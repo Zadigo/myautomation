@@ -1,9 +1,11 @@
-from campaigns.models import Campaign
+from campaigns.choices import WebRequests
+from campaigns.models import Campaign, Action
 from django.shortcuts import get_object_or_404
 from rest_framework import fields
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.serializers import Serializer
+from campaigns.utils import split_values
 
 
 class CampaignStatus(Serializer):
@@ -22,8 +24,16 @@ class CampaignStatus(Serializer):
         return Response(data=serializer.data)
 
 
+class ActionSerializer(Serializer):
+    id = fields.IntegerField()
+    url = fields.URLField()
+    web_request = fields.ChoiceField(WebRequests.choices)
+    runned = fields.BooleanField()
+
+
 class CampaignSerializer(Serializer):
     id = fields.IntegerField()
+    actions = ActionSerializer(many=True)
     name = fields.CharField()
     urls = fields.CharField()
     campaign_urls = fields.ListField()
@@ -65,7 +75,11 @@ class CreateCampaignSerializer(Serializer):
                 }
             })
 
-        Campaign.objects.create(**self.validated_data)
+        campaign = Campaign.objects.create(**self.validated_data)
+        splitted_urls = split_values(urls)
+        for url in splitted_urls:
+            campaign.actions.create(url=url)
+        
         queryset = Campaign.objects.all()
         serializer = CampaignSerializer(instance=queryset, many=True)
         return Response(data=serializer.data)

@@ -1,6 +1,22 @@
 [
     {
         "secured": false,
-        "host": "1.1.1.1"
+        "host": "146.59.199.12",
+        "port": 80
+    },
+    {
+        "secured": false,
+        "host": "1.224.3.122",
+        "port": 3888
+    },
+    {
+        "secured": false,
+        "host": "192.236.160.186",
+        "port": 80
+    },
+    {
+        "secured": false,
+        "host": "43.255.113.232",
+        "port": 80
     }
 ]

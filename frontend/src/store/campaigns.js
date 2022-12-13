@@ -21,14 +21,12 @@ const useCampaigns = defineStore('campaigns', {
       draft: true
     },
     campaigns: [],
-    actions: []
   }),
   actions: {
     updateCampaigns (data) {
       // Update the list of campaigns 
       // and actions
-      this.campaigns = data.campaigns || []
-      this.actions = data.actions || []
+      this.campaigns = data || []
     },
     setCurrentCampaign (campaign) {
       // Set the currently viewed 
@@ -65,6 +63,22 @@ const useCampaigns = defineStore('campaigns', {
         parse_all_text: false,
         draft: true
       }
+    }
+  },
+  getters: {
+    listActions () {
+      return _.map(this.campaigns, (campaign) => {
+        const result = {}
+        _.forEach(campaign.actions, (action) => {
+          result.id = action.id
+          result.campaign_id = campaign.id
+          result.campaign_name = campaign.name
+          result.web_request = action.web_request
+          result.url = action.url
+          result.runned = action.runned
+        })
+        return result
+      })
     }
   }
 })

@@ -11,14 +11,10 @@ from rest_framework.response import Response
 def list_campaign_view(request, **kwargs):
     """Returns the user's list of campaigns
     >>> [{id: ..., name: ..., ....}]"""
-    query = request.GET
+    # query = request.GET
     campaigns = Campaign.objects.all()
     serialized_campaigns = CampaignSerializer(instance=campaigns, many=True)
-    actions = [
-        {'name': 'GET', 'url': 'http://example.com'},
-        {'name': 'POST', 'url': 'http://example.com'}
-    ]
-    return Response(data={'campaigns': serialized_campaigns.data, 'actions': actions})
+    return Response(data=serialized_campaigns.data)
 
 
 @api_view(['post'])
@@ -47,6 +43,8 @@ def run_campaign_view(request, campaign_id, **kwargs):
 
     if campaign.parse_all_tables:
         pass
+    elif campaign.parse_all_text:
+        result = instance.parse_all_text()
     else:
         # Try to identify the website the user
         # is trying to parse from the list, and
@@ -63,6 +61,12 @@ def run_campaign_view(request, campaign_id, **kwargs):
                 pass
             else:
                 result = instance.parse_distinct(website_settings['section'])
+
+    if not campaign.runned:
+        campaign.runned = True
+        campaign.draft = False
+        campaign.save()
+
     return Response(data={'result': result})
 
 

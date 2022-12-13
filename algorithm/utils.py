@@ -20,11 +20,13 @@ def media_path(filename):
 def get_default_proxies():
     """Returns the list of default proxies to
     use for sending requests"""
+    proxies = []
     media_root = pathlib.Path(settings.MEDIA_ROOT)
     with open(media_root.joinpath('proxies.json'), mode='r', encoding='utf-8') as f:
         data = json.load(f)
         for item in data:
-            yield ('https' if item['secured'] else 'http', item['host'])
+            proxies.append(('https' if item['secured'] else 'http', item['host']))
+    return proxies
 
 
 @lru_cache(maxsize=5)

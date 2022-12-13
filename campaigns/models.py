@@ -1,14 +1,44 @@
 from campaigns.utils import upload_file_to
 from campaigns.validators import (validate_csv_file, validate_proxies,
-                                  validate_urls)
+                                  validate_urls, validate_url)
 from django.db import models
 from django.utils.functional import cached_property
+from campaigns.choices import WebRequests
+
+# class Proxy(models.Model):
+#     ip_address = models.IPAddressField()
+#     secured = models.BooleanField(default=False)
+#     risky = models.BooleanField(default=False)
+
+#     def __str__(self):
+#         return self.ip_address
+
+
+class Action(models.Model):
+    url = models.URLField(
+        max_length=1000,
+        validators=[validate_url]
+    )
+    web_request = models.CharField(
+        max_length=100,
+        choices=WebRequests.choices,
+        default=WebRequests.GET
+    )
+    runned = models.BooleanField(default=False)
+    created_on = models.DateField(auto_now=True)
+
+    class Meta:
+        ordering = ['created_on']
+
+    def __str__(self):
+        return self.url
 
 
 class Campaign(models.Model):
     name = models.CharField(
         max_length=100
     )
+    actions = models.ManyToManyField(Action, blank=True)
     urls = models.CharField(
         max_length=1000,
         validators=[validate_urls]
@@ -30,7 +60,7 @@ class Campaign(models.Model):
         max_length=1000,
         blank=True,
         null=True,
-        help_text='List of proxies to use for the request',
+        help_text='List of proxies provided by the user for the request',
         validators=[validate_proxies]
     )
     section_to_parse = models.CharField(
@@ -60,11 +90,12 @@ class Campaign(models.Model):
     )
     created_on = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['name', 'created_on']
+
     def __str__(self):
         return self.name
 
     @cached_property
     def campaign_urls(self):
-        if self.urls is None:
-            return []
-        return self.urls.split(',')
+        return list(self.actions.values_list('url', flat=True))

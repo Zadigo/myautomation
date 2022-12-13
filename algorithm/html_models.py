@@ -1,12 +1,6 @@
 from functools import cached_property
 
-
-class CleaningMixin:
-    def clean_text(self, value):
-        return self.deep_clean(value)
-
-    def deep_clean(self, value):
-        return value
+from algorithm.mixins import CleaningMixin
 
 
 class TableObject(CleaningMixin):

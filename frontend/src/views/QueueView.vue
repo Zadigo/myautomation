@@ -10,7 +10,7 @@
 
       <!-- Content -->
       <div class="row">
-        <div v-if="store.actions.length === 0" class="col-8">
+        <div v-if="listActions.length === 0" class="col-8">
           <p>Aucune action en file d'attente pour le moment</p>
         </div>
 
@@ -18,13 +18,17 @@
           <base-card>
             <template #body>
               <base-list-group>
-                <base-list-group-item v-for="action in actions" :key="action.id" class="d-flex justify-content-between align-items-center">
+                <base-list-group-item v-for="action in listActions" :key="action.id" class="d-flex justify-content-between align-items-center">
                   <div class="info">
-                    <span :class="actionColor(action.name)" class="fw-bold">{{ action.name }}</span> /
+                    <span :class="actionColor(action.web_request)" class="fw-bold">{{ action.web_request }}</span> /
+                    <span>{{ action.campaign_name }}</span> /
                     <span>{{ action.url }}</span>
                   </div>
-                  <div class="badge badge-pill badge-success">
+                  <div v-if="action.runned" class="badge badge-pill badge-success">
                     Completed
+                  </div>
+                  <div v-else class="badge badge-pill badge-danger">
+                    Pending
                   </div>
                 </base-list-group-item>
               </base-list-group>
@@ -200,7 +204,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(useCampaigns, ['actions'])
+    ...mapState(useCampaigns, ['listActions'])
   },
   beforeMount () {
     this.store.loadFromCache(this.$route.params.id)
