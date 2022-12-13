@@ -7,14 +7,12 @@
   <section>
     <div class="container">
       <div class="row">
-        <div class="col-sm-12 col-md-12">
+        <div class="col-sm-12 col-md-6">
           <base-card>
             <template #body>
-              <div class="w-50">
-                <label for="select-section" class="fw-bold">Choose the section of the page to parse</label>
-                <base-input id="select-section" v-model="store.newCampaign.section_to_parse" :disabled="store.newCampaign.parse_all_tables || store.newCampaign.parse_all_text" />
-              </div>
-              
+              <label for="select-section" class="fw-bold">Choose the section of the page to parse</label>
+              <base-input id="select-section" v-model="store.newCampaign.section_to_parse" :disabled="store.newCampaign.parse_all_tables || store.newCampaign.parse_all_text" />
+
               <div class="mt-4">
                 <base-checkbox id="select-parse-all-tables" v-model="store.newCampaign.parse_all_tables" :disabled="store.newCampaign.parse_all_text" label="Parse all the tables on the page" is-switch />
                 <base-checkbox id="select-parse-all-text" v-model="store.newCampaign.parse_all_text" :disabled="store.newCampaign.parse_all_tables" class="my-3" label="Parse all the text on the page" is-switch />
@@ -39,6 +37,10 @@
             </template>
           </base-card>
         </div>
+
+        <div class="col-sm-12 col-md-6">
+          <conditions-group />
+        </div>
       </div>
     </div>
   </section>
@@ -52,13 +54,15 @@ import { getCurrentInstance } from 'vue'
 import BaseCard from '@/layouts/bootstrap/cards/BaseCard.vue'
 import BaseCheckbox from '@/layouts/bootstrap/BaseCheckbox.vue'
 import BaseInput from '@/layouts/bootstrap/BaseInput.vue'
+import ConditionsGroup from '../conditions/ConditionsGroup.vue'
 
 export default {
   name: 'CustomCampaign',
   components: {
     BaseCard,
     BaseCheckbox,
-    BaseInput
+    BaseInput,
+    ConditionsGroup
   },
   setup () {
     const app = getCurrentInstance()
@@ -70,14 +74,5 @@ export default {
       goToNext
     }
   }
-  // methods: {
-  //   goToNext () {
-  //     // Save the campaign in the user session. This stays until
-  //     // the user completes all the steps and creates the campaign
-  //     this.$session.create('draftCampaign', this.store.newCampaign)
-  //     this.$router.push({ name: 'custom_campaign_setup_view', params: { id: this.$route.params.id } })
-  //     // this.$router.push({ name: 'campaign_setup_settings_view', params: { id: this.$route.params.id } })
-  //   }
-  // }
 }
 </script>
