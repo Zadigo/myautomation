@@ -1,6 +1,6 @@
 <template>
   <div :class="[isSwitch ? 'form-switch' : 'form-check', { 'form-check-inline': inline }]">
-    <input :id="id" :class="inputClasses" :disabled="disabled" :checked="modelValue" :type="checkboxType" :role="[isSwitch ? 'switch' : null ]" :name="name" class="form-check-input" @change="emitValue($event)">
+    <input :id="id" :class="inputClasses" :checked="modelValue" :type="checkboxType" :role="[isSwitch ? 'switch' : null]" :name="name" class="form-check-input" @change="emitValue($event)">
     <label :for="id" class="form-check-label">{{ label }}</label>
   </div>
 </template>
@@ -14,9 +14,6 @@ export default {
     id: {
       type: String,
       required: true
-    },
-    disabled: {
-      type: Boolean
     },
     // bigger: {
     //   type: Boolean

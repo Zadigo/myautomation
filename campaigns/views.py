@@ -48,18 +48,20 @@ def run_campaign_view(request, campaign_id, **kwargs):
     else:
         # Try to identify the website the user
         # is trying to parse from the list, and
-        # then used the manual identification
+        # then use the manual identification
         # to try and get the most interesting
         # section of the website
         website_settings = get_settings_for_parsed_website('example.com')
-        if not website_settings:
+        if website_settings is None:
             # Just parse everything on the page
             pass
         else:
-            if website_settings['section'] is None:
+            if not website_settings.has_sections:
                 # Just parse everything on the page
                 pass
             else:
+                # for section in website_settings:
+                #     result = instance.parse_distinct(**section)
                 result = instance.parse_distinct(website_settings['section'])
 
     if not campaign.runned:
@@ -81,3 +83,11 @@ def change_campaign_state_view(request, campaign_id, **kwargs):
     serializer = CampaignStatus(data=request.data)
     serializer.is_valid(raise_exception=True)
     return serializer.save()
+
+
+@api_view(['post'])
+def test_view(request, **kwargs):
+    campaign = get_object_or_404(Campaign, id=11)
+    algorithm = Algorithm(campaign)
+    result = algorithm.parse_tables()
+    return Response(result)

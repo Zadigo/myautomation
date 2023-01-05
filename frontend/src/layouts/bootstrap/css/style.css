@@ -26,3 +26,162 @@ html {
  /* .card-group .card {
     border: 1px solid rgba(0, 0, 0, 0.175);
  } */
+
+
+
+ /* 
+  Modals
+  */
+
+.modal-open {
+    transition: all .35s linear;
+    overflow: hidden;
+}
+
+.modal-dialog {
+    transition: all .15s ease;
+    /* animation: slide .35s ease-in-out; */
+}
+
+@media (min-width: 992px) {
+    .modal .modal-side {
+        position: absolute;
+        width: 100%;
+        right: 10px;
+        bottom: 10px;
+        margin: 0;
+    }
+}
+
+.modal .modal-frame {
+    position: absolute;
+    max-width: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+@media (min-width: 768px) {
+    .modal .modal-dialog.modal-top {
+        top: 0;
+    }
+}
+
+@media (min-width: 768px) {
+    .modal .modal-dialog.modal-bottom {
+        bottom: 0;
+    }
+}
+
+@media (min-width: 768px) {
+    .modal .modal-dialog.modal-top-right {
+        top: 10px;
+        right: 10px;
+    }
+}
+
+@media (min-width: 768px) {
+    .modal .modal-dialog.modal-top-left {
+        top: 10px;
+        left: 10px;
+    }
+}
+
+@media (min-width: 768px) {
+    .modal .modal-dialog.modal-bottom-right {
+        right: 10px;
+        bottom: 10px;
+    }
+}
+
+@media (min-width: 768px) {
+    .modal .modal-dialog.modal-bottom-left {
+        bottom: 10px;
+        left: 10px;
+    }
+}
+
+.modal-from-top-enter-active,
+.modal-from-top-leave-active {
+    transition: all .35s ease-in-out;
+}
+
+.modal-from-top-enter-from,
+.modal-from-top-leave-to {
+    transform: translateY(-50px);
+}
+
+.modal-from-top-enter-to,
+.modal-from-top-leave-from {
+    transform: translateY(0px);
+}
+
+.modal-from-bottom-enter-active,
+.modal-from-bottom-leave-active {
+    transition: all .35s ease-in-out;
+}
+
+.modal-from-bottom-enter-from,
+.modal-from-bottom-leave-to {
+    transform: translateY(50px);
+}
+
+.modal-from-bottom-enter-to,
+.modal-from-bottom-leave-from {
+    transform: translateY(0px);
+}
+
+.modal-from-left-enter-active,
+.modal-from-left-leave-active {
+    transition: all .35s ease-in-out;
+}
+
+.modal-from-left-enter-from,
+.modal-from-left-leave-to {
+    transform: translateX(-50px);
+}
+
+.modal-from-left-enter-to,
+.modal-from-left-leave-from {
+    transform: translateX(0px);
+}
+
+.modal-from-right-enter-active,
+.modal-from-right-leave-active {
+    transition: all .35s ease-in-out;
+}
+
+.modal-from-right-enter-from,
+.modal-from-right-leave-to {
+    transform: translateX(50px);
+}
+
+.modal-from-right-enter-to,
+.modal-from-right-leave-from {
+    transform: translateX(0px);
+}
+
+.modal-backdrop-enter-active,
+.modal-backdrop-leave-active {
+    transition: opacity .34s ease-out;
+}
+
+.modal-backdrop-enter-from,
+.modal-backdrop-leave-to {
+    opacity: 0;
+}
+
+.modal-backdrop-enter-to,
+.modal-backdrop-leave-from {
+    opacity: 1;
+}
+
+
+/* 
+ Offcanvas
+*/
+
+.offcanvas-footer {
+    padding: .75rem 1.5rem;
+    background-color: hsla(0, 0%, 100%, 0);
+    border-top: 2px solid #f5f5f5;
+}

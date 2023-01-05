@@ -7,6 +7,11 @@
   <section>
     <div class="container">
       <div class="row">
+        <!-- Visual selection -->
+        <div class="col-sm-12 col-md-12">
+          <website-iframe :website="store.newCampaign.urls" />
+        </div>
+
         <div class="col-sm-12 col-md-6">
           <!-- Parsing options -->
           <base-card title="Choose the sections of the page to parse">
@@ -14,7 +19,7 @@
               <!-- <label for="select-section" class="fw-bold">Choose the section of the page to parse</label> -->
               <base-input id="select-section" v-model="store.newCampaign.section_to_parse" :disabled="store.newCampaign.parse_all_tables || store.newCampaign.parse_all_text" placeholder="e.g. div#section" />
 
-              <button type="button" class="btn btn-info mt-2 disabled" @click="showLogicalMap = !showLogicalMap">
+              <button type="button" class="btn btn-info mt-2" @click="showLogicalMap = !showLogicalMap">
                 <font-awesome-icon icon="fa-solid fa-list-check" class="me-2" />
                 Use logical map
               </button>
@@ -106,8 +111,9 @@ import BaseCheckbox from '@/layouts/bootstrap/BaseCheckbox.vue'
 import BaseInput from '@/layouts/bootstrap/BaseInput.vue'
 import ConditionsGroup from '../conditions/ConditionsGroup.vue'
 import BaseListGroup from '@/layouts/bootstrap/listgroup/BaseListGroup.vue'
-import BaseListGroupCheckbox from '@/layouts/bootstrap/listgroups/BaseListGroupCheckbox.vue'
+import BaseListGroupCheckbox from '@/layouts/bootstrap/listgroup/BaseListGroupCheckbox.vue'
 import BaseListGroupItem from '@/layouts/bootstrap/listgroup/BaseListGroupItem.vue'
+import WebsiteIframe from '@/components/WebsiteIframe.vue'
 
 export default {
   name: 'CustomCampaign',
@@ -118,7 +124,8 @@ export default {
     BaseListGroup,
     BaseListGroupCheckbox,
     BaseListGroupItem,
-    ConditionsGroup
+    ConditionsGroup,
+    WebsiteIframe
   },
   setup () {
     const { listManager  } = useUtilities()

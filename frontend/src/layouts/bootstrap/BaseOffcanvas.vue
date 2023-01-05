@@ -66,10 +66,10 @@ export default {
       return [
         'offcanvas',
         {
+          'text-bg-dark': this.darkMode,
           show: this.show
         },
         // this.darkMode ? 'bg-dark text-light' : 'bg-white text-dark',
-        this.darkMode ? 'text-bg-dark' : null,
         {
           [`offcanvas-${this.position}`]: true
         }

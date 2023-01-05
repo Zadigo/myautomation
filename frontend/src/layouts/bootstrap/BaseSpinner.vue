@@ -1,8 +1,6 @@
 <template>
-  <!-- aria-hidden="true" -->
-  <div :class="spinnerClasses" role="status">
-    <span class="visually-hidden">Loading...</span>
-  </div>
+  <span :class="spinnerClasses" role="status" aria-hidden="true"></span>
+  <!-- <span class="visually-hidden">Loading...</span> -->
 </template>
 
 <script>

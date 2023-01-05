@@ -39,21 +39,24 @@ class HTTPRequest:
                 self.errors.append((f'Request failed with code {response.status_code}'))
 
     def prepare_headers(self, **headers):
-        return {
+        items = {
             **headers,
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36 Edg/108.0.1462.42',
-            'Accept-Encoding': 'gzip, deflate',
-            'Connection': 'keep-alive',
-            'Accept-Language': 'fr,en-US;q=0.9,en;q=0.8,fr-FR;q=0.7,en-GB;q=0.6',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
+            **get_random_header()
         }
+        
+        if not items:
+            self.errors.append(('Headers', 'No header'))
+
+        if items['User-Agent'] is None:
+            self.errors.append(('User-Agent', 'No user agent'))
+        
+        return items
 
     def before_send(self, **params):
         return params
 
     def create_session(self, **params):
         session = requests.Session()
-        # session.proxies
         request = requests.models.Request(
             **self.before_send(**params)
         )
@@ -107,7 +110,6 @@ class Algorithm(CleaningMixin):
     def parse_distinct(self, tag=None, **attrs):
         """Parse a distinct element on the
         given HTML page"""
-        instance = TweetTokenizer()
         soups = self.resolve_all()
         for soup in soups:
             item = soup.find(tag, **attrs)

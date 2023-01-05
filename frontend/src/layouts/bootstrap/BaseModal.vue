@@ -1,6 +1,6 @@
 <template>
   <div ref="link" class="modal-wrapper">
-    <transition name="modal">
+    <transition :name="currentAnimation">
       <div v-if="show" :id="id" :class="modalClasses" :aria-modal="show" class="modal" role="dialog" tabindex="-1">
         <div :class="modalDialogClasses" class="modal-dialog">
           <div :class="modalContentClasses" class="modal-content">
@@ -21,7 +21,9 @@
       </div>
     </transition>
     
-    <div v-if="show && !nonInvasive" :class="{show}" class="modal-backdrop"></div>
+    <transition name="modal-backdrop">
+      <div v-if="show && !nonInvasive" :class="{ show }" class="modal-backdrop"></div>
+    </transition>
   </div>
 </template>
 
@@ -91,7 +93,9 @@ export default {
           break
       }
       return [
-        this.show ? 'show' : null,
+        {
+          show: this.show
+        },
         position
       ]
     },
@@ -125,6 +129,25 @@ export default {
         this.hasPositionY ? 'rounded-0' : null,
         this.darkMode ? 'bg-dark text-light' : 'bg-white text-dark'
       ]  
+    },
+    currentAnimation () {
+      if (this.position === 'fullscreen') {
+        return 'modal-from-bottom'
+      }
+
+      if (this.position === 'top-left' || this.position === 'bottom-left') {
+        return 'modal-from-left'
+      }
+
+      if (this.position === 'top-right' || this.position === 'bottom-right') {
+        return 'modal-from-right'
+      }
+
+      if (this.position === 'bottom') {
+        return 'modal-from-bottom'
+      }
+
+      return 'modal-from-top'
     },
     hasPositionX () {
       const positions = ['right', 'left', 'top-right', 'top-left', 'bottom-left', 'bottom-right']
@@ -200,81 +223,4 @@ export default {
 .modal-backdrop.show {
   opacity: .5;
 }
-
-.modal-enter-from {
-  opacity: 0;
-}
-
-.modal-leave-to {
-  opacity: 0;
-}
-
-.modal-enter-from .modal-dialog,
-.modal-leave-to .modal-dialog {
-  transform: scale(5.1);
-}
-
-/* .modal-animation {
-  animation-duration: 0.5s;
-  animation-fill-mode: both;
-}
-
-.dialog-fade-in-down {
-  animation: fade-in-down;
-}
-
-.dialog-fade-out-up {
-  animation: fade-out-up;
-}
-
-@keyframes fade-in-down {
-  from {
-    opacity: 0;
-    transform: translate3d(0, -10%, 0);
-  }
-
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-@keyframes fade-out-up {
-  from {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0;
-    transform: translate3d(0, -10%, 0);
-  }
-}
-
-.dialog-fade-in {
-  animation-name: fade-in;
-}
-
-.dialog-fade-out {
-  animation-name: fade-out;
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 0.5;
-  }
-}
-
-@keyframes fade-out {
-  from {
-    opacity: 0.5;
-  }
-
-  to {
-    opacity: 0;
-  }
-} */
 </style>

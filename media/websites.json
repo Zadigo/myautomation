@@ -1,12 +1,34 @@
 [
     {
+        "url": "wtatennis.com",
+        "api": true,
+        "tree": {}
+    },
+    {
         "url": "pagesjaunes.fr",
-        "section": null,
-        "attrs": null
+        "api": false,
+        "tree": {}
     },
     {
         "url": "example.com",
-        "section": "h1",
-        "attrs": null
+        "api": false,
+        "tree": {
+            "1": [
+                {
+                    "tag": "div",
+                    "attrs": {
+                        "id": "list-of-browsers",
+                        "class": null
+                    }
+                },
+                {
+                    "tag": "table",
+                    "attrs": {
+                        "id": "ninofefz-oinzoe",
+                        "class": null
+                    }
+                }
+            ]
+        }
     }
 ]

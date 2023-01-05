@@ -60,9 +60,47 @@ def get_headers(data):
 
 
 def get_random_header():
-    headers = get_headers()
+    headers = list(get_headers())
     random.shuffle(headers)
-    return random.choice(headers)
+    try:
+        header = random.choice(headers)
+    except:
+        header = {}
+    
+    user_agents = list(get_user_agents())
+    random.shuffle(user_agents)
+    try:
+        header['User-Agent'] = random.choice(user_agents)
+    except:
+        header['User-Agent'] = None
+    return header
+
+
+class WebsiteSetting:
+    def __init__(self, data):
+        self.data = data
+        self.tree_cache = data['tree']
+        self.tree = []
+
+        for _, items in self.tree_cache.items():
+            self.tree.append((items))
+
+    def __iter__(self):
+        for section in self.get_sections():
+            return section
+
+    @property
+    def has_sections(self):
+        return len(self.tree) > 0
+
+    @staticmethod
+    def format_sections(value):
+        return {'tag': value['tag'], 'attrs': value['attrs']}
+
+    def get_sections(self):
+        """Return the child element of the tree
+        that we have to use to extract the data"""
+        return map(lambda x: self.format_sections(x[-1]), self.tree)
 
 
 @lru_cache(maxsize=100)
@@ -73,11 +111,12 @@ def get_settings_for_parsed_website(domain):
     tried = []
     media_root = pathlib.Path(settings.MEDIA_ROOT)
     with open(media_root.joinpath('websites.json'), mode='r', encoding='utf-8') as f:
-        valid_domain = {}
+        valid_domain = None
         data = json.load(f)
         for item in data:
             if domain in item['url']:
-                valid_domain = item
+                # valid_domain = item
+                valid_domain = WebsiteSetting(item)
                 break
             else:
                 tried.append(item)

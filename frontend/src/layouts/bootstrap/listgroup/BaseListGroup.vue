@@ -1,10 +1,13 @@
 <template>
   <ul :class="listGroupClasses" class="list-group">
-    <slot></slot>
+    <slot :handle-selection="handleSelection" :list-group-items="listGroupItems"></slot>
   </ul>
 </template>
 
 <script>
+import { ref, getCurrentInstance } from 'vue'
+import { useLists } from '../composables/index'
+
 export default {
   name: 'BaseListGroup',
   props: {
@@ -20,6 +23,28 @@ export default {
     },
     numbered: {
       type: Boolean
+    },
+    items: {
+      type: Array,
+      default: () => []
+    }
+  },
+  emits: {
+    'update:list-group-selection' () {
+      return true
+    }
+  },
+  setup () {
+    const app = getCurrentInstance()
+    const listGroupItems = app.props.items
+    const lastSelection = ref({})
+    const { selectedByIndex, simpleSelection, selected } = useLists(listGroupItems)
+    return {
+      lastSelection,
+      simpleSelection,
+      listGroupItems,
+      selected,
+      selectedByIndex
     }
   },
   computed: {
@@ -32,6 +57,13 @@ export default {
           [`list-group-item-${this.color}`]: true
         }
       ]
+    }
+  },
+  methods: {
+    handleSelection (index) {
+      this.lastSelection = this.items[index]
+      this.simpleSelection(index)
+      this.$emit('update:list-group-selection', this.selectedByIndex)
     }
   }
 }

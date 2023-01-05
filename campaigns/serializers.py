@@ -6,6 +6,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.serializers import Serializer
 from campaigns.utils import split_values
+from campaigns.utils import LogicalMapFormatter
 
 
 class CampaignStatus(Serializer):
@@ -53,7 +54,8 @@ class CampaignSerializer(Serializer):
 class CreateCampaignSerializer(Serializer):
     name = fields.CharField()
     urls = fields.CharField(allow_null=True)
-    # data_constraint = fields.ListField()
+    # logical_map = None
+    # data_constraint = None
     results_per_search = fields.IntegerField(default=100)
     csv_file = fields.FileField(allow_null=True)
     retries = fields.IntegerField(default=0)
@@ -80,9 +82,12 @@ class CreateCampaignSerializer(Serializer):
         splitted_urls = split_values(urls)
         for url in splitted_urls:
             campaign.actions.create(url=url)
-        
+
         queryset = Campaign.objects.all()
         serializer = CampaignSerializer(instance=queryset, many=True)
+
+        # logical_maps = LogicalMapFormatter()
+        # logical_maps.build([])
         return Response(data=serializer.data)
 
     def update(self, instance):
